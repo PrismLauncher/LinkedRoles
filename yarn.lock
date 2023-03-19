@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@prisma/client@^4.11.0":
+"@prisma/client@4.11.0":
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.11.0.tgz#41d5664dea4172c954190a432f70b86d3e2e629b"
   integrity sha512-0INHYkQIqgAjrt7NzhYpeDQi8x3Nvylc2uDngKyFDDj1tTRQ4uV1HnVmd1sQEraeVAN63SOK0dgCKQHlvjL0KA==
@@ -82,7 +82,7 @@ content-type@~1.0.4:
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.5.tgz#8b773162656d1d1086784c8f23a54ce6d73d7918"
   integrity sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==
 
-cookie-parser@^1.4.6:
+cookie-parser@1.4.6:
   version "1.4.6"
   resolved "https://registry.yarnpkg.com/cookie-parser/-/cookie-parser-1.4.6.tgz#3ac3a7d35a7a03bbc7e365073a26074824214594"
   integrity sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==
@@ -127,7 +127,7 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-discord-interactions@^3.3.0:
+discord-interactions@3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/discord-interactions/-/discord-interactions-3.3.0.tgz#9d8d286f7c0a34f663fc7060ad69482362253471"
   integrity sha512-Z8IAoKz6lLefdr6HzcZU1BijGqi+8lwNxtKxod6gXKJhdairuUY65PjvBcw2BodBb26qsMoY1ExkSSUWYJGurg==
@@ -164,7 +164,7 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-express@^4.18.2:
+express@4.18.2:
   version "4.18.2"
   resolved "https://registry.yarnpkg.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
   integrity sha512-5/PsL6iGPdfQ/lKM1UuielYgv3BUoJfz1aUwU9vHZ+J7gyvwdQXFEBIEIaxeGf0GIcreATNyBExtalisDbuMqQ==
@@ -380,7 +380,7 @@ node-domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
 
-node-fetch@^3.3.1:
+node-fetch@3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-3.3.1.tgz#b3eea7b54b3a48020e46f4f88b9c5a7430d20b2e"
   integrity sha512-cRVc/kyto/7E5shrWca1Wsea4y6tL9iYJE5FBCius3JQfb/4P4I295PfhgbJQBLTx6lATE4z+wK0rPM4VS2uow==
@@ -416,7 +416,7 @@ prettier@2.8.4:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
   integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
 
-prisma@^4.11.0:
+prisma@4.11.0:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.11.0.tgz#9695ba4129a43eab3e76b5f7a033c6c020377725"
   integrity sha512-4zZmBXssPUEiX+GeL0MUq/Yyie4ltiKmGu7jCJFnYMamNrrulTBc+D+QwAQSJ01tyzeGHlD13kOnqPwRipnlNw==
