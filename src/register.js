@@ -8,28 +8,22 @@ const url = `https://discord.com/api/v10/applications/${process.env.DISCORD_CLIE
 // supported types: number_lt=1, number_gt=2, number_eq=3 number_neq=4, datetime_lt=5, datetime_gt=6, boolean_eq=7, boolean_neq=8
 const body = [
   {
-    key: 'ispackager',
-    name: 'Is Packager',
-    description: 'Is a Prism Packager',
+    key: 'cookieseaten',
+    name: 'Cookies Eaten',
+    description: 'Cookies Eaten Greater Than',
+    type: 2,
+  },
+  {
+    key: 'allergictonuts',
+    name: 'Allergic To Nuts',
+    description: 'Is Allergic To Nuts',
     type: 7,
   },
   {
-    key: 'iscoder',
-    name: 'Is Coder',
-    description: 'Is a Prism Code Contributor',
-    type: 7,
-  },
-  {
-    key: 'isdocumentation',
-    name: 'Is Documentation',
-    description: 'Is a Prism Documentation Contributor',
-    type: 7,
-  },
-  {
-    key: 'istranslator',
-    name: 'Is Translator',
-    description: 'Is a Prism Translations Contributor',
-    type: 7,
+    key: 'bakingsince',
+    name: 'Baking Since',
+    description: 'Days since baking their first cookie',
+    type: 6,
   },
 ];
 
