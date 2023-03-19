@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
  */
 app.post(
   '/',
-  verifyKeyMiddleware(process.env.DISCORD_PUBLIC_KEY),
+  verifyKeyMiddleware(process.env.DISCORD_PUBLIC_KEY!),
   async (request, response) => {
     const message = request.body;
     if (message.type === InteractionType.PING) {
@@ -72,9 +72,9 @@ app.post(
           if (githubUserId) {
             cleanedUp = true;
 
-            // 4. Revoke Fitbit OAuth2 tokens
-            await fitbit.revokeAccess(fitbitUserId);
-            await storage.deleteLinkedFitbitUser(userId);
+            // 4. Revoke Github OAuth2 tokens
+            await github.revokeAccess(githubUserId);
+            await storage.deleteLinkedGithubUser(userId);
           }
 
           // 5. Let the user know the slash command worked
@@ -82,7 +82,7 @@ app.post(
             response.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: 'Fitbit account disconnected.',
+                content: 'Github account disconnected.',
               },
             });
           } else {
@@ -93,19 +93,19 @@ app.post(
         case GET_PROFILE.name.toLowerCase(): {
           /**
            * GET PROFILE
-           * If the user has a linked Fitbit account, fetch the profile data.
+           * If the user has a linked Github account, fetch the profile data.
            */
           const userId = message.member.user.id;
-          const fitbitUserId = await storage.getLinkedFitbitUserId(userId);
-          if (!fitbitUserId) {
+          const githubUserId = await storage.getLinkedGithubUserId(userId);
+          if (!githubUserId) {
             return sendNoConnectionFound(response);
           }
 
-          const fitbitTokens = await storage.getFitbitTokens(fitbitUserId);
-          if (!fitbitTokens) {
+          const githubTokens = await storage.getGithubTokens(githubUserId);
+          if (!githubTokens) {
             return sendNoConnectionFound(response);
           }
-          const profile = await fitbit.getProfile(fitbitUserId, fitbitTokens);
+          const profile = await github.getProfile(githubUserId, githubTokens);
           const metadata = {
             averagedailysteps: profile.user.averageDailySteps,
             ambassador: profile.user.ambassador,
@@ -134,7 +134,7 @@ app.post(
 
 /**
  * Route configured in the Discord developer console which facilitates the
- * connection between Discord and Fitbit. To start the flow, generate the OAuth2
+ * connection between Discord and Github. To start the flow, generate the OAuth2
  * consent dialog url for Discord, and send the user there.
  */
 app.get('/verified-role', async (req, res) => {
@@ -155,8 +155,8 @@ app.get('/verified-role', async (req, res) => {
  * completes a few steps:
  * 1. Uses the code to acquire Discord OAuth2 tokens
  * 2. Uses the Discord Access Token to fetch the user profile
- * 3. Stores the OAuth2 Discord Tokens in Redis / Firestore
- * 4. Generates an OAuth2 consent dialog url for Fitbit, and redirects the user.
+ * 3. Stores the OAuth2 Discord Tokens in Postgres
+ * 4. Generates an OAuth2 consent dialog url for Github, and redirects the user.
  */
 app.get('/discord-oauth-callback', async (req, res) => {
   try {
@@ -182,16 +182,16 @@ app.get('/discord-oauth-callback', async (req, res) => {
       expires_at: Date.now() + tokens.expires_in * 1000,
     });
 
-    // start the fitbit OAuth2 flow by generating a new OAuth2 Url
-    const { url, codeVerifier, state } = fitbit.getOAuthUrl();
+    // start the Github OAuth2 flow by generating a new OAuth2 Url
+    const { url, codeVerifier, state } = github.getOAuthUrl();
 
-    // store the code verifier and state arguments required by the fitbit url
+    // store the code verifier and state arguments required by the Github url
     await storage.storeStateData(state, {
       discordUserId: userId,
       codeVerifier,
     });
 
-    // send the user to the fitbit OAuth2 consent dialog screen
+    // send the user to the Github OAuth2 consent dialog screen
     res.redirect(url);
   } catch (e) {
     console.error(e);
@@ -200,25 +200,25 @@ app.get('/discord-oauth-callback', async (req, res) => {
 });
 
 /**
- * Route configured in the Fitbit developer console, the redirect Url to which
- * the user is sent after approvingv the bot for their Fitbit account.
+ * Route configured in the Github developer console, the redirect Url to which
+ * the user is sent after approvingv the bot for their Github account.
  * 1. Use the state in the querystring to fetch the code verifier and challenge
- * 2. Use the code in the querystring to acquire Fitbit OAuth2 tokens
- * 3. Store the Fitbit tokens in redis / Firestore
+ * 2. Use the code in the querystring to acquire Github OAuth2 tokens
+ * 3. Store the Github tokens in Postgres
  * 4. Create a new subscription to ensure webhook events are sent for the current user
- * 5. Fetch Fitbit profile metadata, and push it to the Discord metadata service
+ * 5. Fetch Github profile metadata, and push it to the Discord metadata service
  */
-app.get('/fitbit-oauth-callback', async (req, res) => {
+app.get('/github-oauth-callback', async (req, res) => {
   try {
     // 1. Use the state in the querystring to fetch the code verifier and challenge
     const state = req.query['state'] as string;
     const { discordUserId, codeVerifier } = await storage.getStateData(state);
 
-    // 2. Use the code in the querystring to acquire Fitbit OAuth2 tokens
+    // 2. Use the code in the querystring to acquire Github OAuth2 tokens
     const code = req.query['code'] as string;
-    const tokens = await fitbit.getOAuthTokens(code, codeVerifier);
+    const tokens = await github.getOAuthTokens(code, codeVerifier);
 
-    // 3. Store the Fitbit tokens in redis / Firestore
+    // 3. Store the Github tokens in Postgres
     const userId = tokens.user_id;
     const data = {
       discord_user_id: discordUserId,
@@ -227,15 +227,15 @@ app.get('/fitbit-oauth-callback', async (req, res) => {
       expires_at: Date.now() + tokens.expires_in * 1000,
       code_verifier: codeVerifier,
     };
-    await storage.storeFitbitTokens(userId, data);
+    await storage.storeGithubTokens(userId, data);
 
     // 4. Create a new subscription to ensure webhook events are sent for the current user
-    await fitbit.createSubscription(userId, data);
+    await github.createSubscription(userId, data);
 
-    // 5. Fetch Fitbit profile metadata, and push it to the Discord metadata service
+    // 5. Fetch Github profile metadata, and push it to the Discord metadata service
     await updateMetadata(userId);
 
-    await storage.setLinkedFitbitUserId(discordUserId, userId);
+    await storage.setLinkedGithubUserId(discordUserId, userId);
 
     res.send('You did it!  Now go back to Discord.');
   } catch (e) {
@@ -245,13 +245,13 @@ app.get('/fitbit-oauth-callback', async (req, res) => {
 });
 
 /**
- * Route configured in the Fitbit developer console, the route where user
- * events are sent. This is used once for url verification by the Fitbit API.
+ * Route configured in the Github developer console, the route where user
+ * events are sent. This is used once for url verification by the Github API.
  * Note: this is a `GET`, and the actual webhook is a `POST`
  * Verify subscriber as explained in:
  * https://dev.fitbit.com/build/reference/web-api/developer-guide/using-subscriptions/#Verifying-a-Subscriber
  */
-app.get('/fitbit-webhook', async (req, res) => {
+app.get('/github-webhook', async (req, res) => {
   const verify = req.query['verify'] as string;
   console.log(req.url);
   if (verify === process.env.FITBIT_SUBSCRIBER_VERIFY) {
@@ -263,20 +263,20 @@ app.get('/fitbit-webhook', async (req, res) => {
 });
 
 /**
- * Route configured in the Fitbit developer console, the route where user events are sent.
+ * Route configured in the Github developer console, the route where user events are sent.
  * Takes a few steps:
- * 1. Fetch the Discord and Fitbit tokens from storage (redis / firestore)
- * 2. Fetch the user profile data from Fitbit and send it to Discord
+ * 1. Fetch the Discord and Github tokens from storage (Postgres)
+ * 2. Fetch the user profile data from Github and send it to Discord
  */
-app.post('/fitbit-webhook', async (req, res) => {
+app.post('/github-webhook', async (req, res) => {
   try {
-    const body = req.body as fitbit.WebhookBody;
+    const body = req.body as github.WebhookBody;
 
-    // 1. Fetch the Discord and Fitbit tokens from storage (redis / firestore)
+    // 1. Fetch the Discord and Github tokens from storage (Postgres)
     const userId = body.ownerId;
     await updateMetadata(userId);
 
-    // 2. Fetch the user profile data from Fitbit, and push it to Discord
+    // 2. Fetch the user profile data from Github, and push it to Discord
     res.sendStatus(204);
   } catch (e) {
     res.sendStatus(500);
@@ -287,7 +287,7 @@ function sendNoConnectionFound(response) {
   return response.send({
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
-      content: `🥴 no Fitbit connection info found.  Visit ${process.env.VERIFICATION_URL} to set it up.`,
+      content: `🥴 no Github connection info found.  Visit ${process.env.VERIFICATION_URL} to set it up.`,
     },
   });
 }

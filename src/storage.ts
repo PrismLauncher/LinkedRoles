@@ -1,5 +1,4 @@
-import { createClient, RedisClientType } from 'redis';
-import { Firestore, Timestamp } from '@google-cloud/firestore';
+import { Pool } from 'pg';
 
 /**
  * OAuth2 inherently requires storing access tokens, refresh tokens, and
@@ -30,7 +29,6 @@ export interface GithubData {
 interface StateData {
   codeVerifier: string;
   discordUserId: string;
-  ttl?: Timestamp;
 }
 
 export async function storeDiscordTokens(userId: string, data: DiscordData) {
@@ -88,21 +86,14 @@ export async function deleteLinkedGithubUser(discordUserId: string) {
  * Postgres storage provider.
  */
 export class PostgresClient implements StorageProvider {
-  private _client: PostgresClientType;
-
   async getClient() {
-    if (!this._client) {
-      this._client = createClient();
-      this._client.on('error', (err: string) => {
-        console.log('Postgres Client Error', err);
-      });
-      await this._client.connect();
-      return this._client;
-    }
-    if (!this._client.isOpen) {
-      await this._client.connect();
-    }
-    return this._client;
+    const pool = new Pool({
+      user: 'me',
+      host: 'localhost',
+      database: 'api',
+      password: 'password',
+      port: 5432,
+    });
   }
 
   async setData(key: string, data: unknown, ttlSeconds?: number) {
