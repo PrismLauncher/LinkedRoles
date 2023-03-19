@@ -8,19 +8,18 @@
     "dev": "NODE_ENV=development tsx watch src/index.js",
     "start": "tsx src/server.js",
     "reupload": "tsx src/_reupload.js",
-    "lint": "eslint .",
     "preinstall": "npx only-allow yarn"
   },
   "dependencies": {
+    "@prisma/client": "^4.11.0",
     "cookie-parser": "^1.4.6",
     "discord-interactions": "^3.3.0",
     "express": "^4.18.2",
     "node-fetch": "^3.3.1"
   },
   "devDependencies": {
+    "prisma": "^4.11.0",
     "dotenv": "16.0.3",
-    "esbuild": "0.17.11",
-    "eslint": "8.36.0",
     "gray-matter": "4.0.3",
     "prettier": "2.8.4"
   }

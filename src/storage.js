@@ -1,9 +1,20 @@
-const store = new Map();
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export async function storeDiscordTokens(userId, tokens) {
-  await store.set(`discord-${userId}`, tokens);
+  await prisma.user.create({
+    data: {
+      id: userId,
+      token: tokens,
+    },
+  })
 }
 
 export async function getDiscordTokens(userId) {
-  return store.get(`discord-${userId}`);
+  await prisma.user.get({
+    data: {
+      id: userId,
+    },
+  })
 }
