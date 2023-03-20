@@ -2,25 +2,42 @@
   "name": "prism-linked-roles",
   "version": "1.0.0",
   "license": "GPL-3.0",
-  "main": "server.js",
+  "main": "./build/src/server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development tsx watch src/index.js",
-    "start": "tsx src/server.js",
-    "reupload": "tsx src/_reupload.js",
-    "preinstall": "npx only-allow yarn"
+    "pretest": "npm run build",
+    "fix": "eslint --fix '**/*.ts'",
+    "lint": "eslint '**/*.ts'",
+    "dev": "tsc --watch & nodemon -w build/src build/src/server.js",
+    "build": "tsc",
+    "start": "node build/src/server.js"
   },
   "dependencies": {
-    "@prisma/client": "4.11.0",
+    "body-parser": "1.20.1",
     "cookie-parser": "1.4.6",
     "discord-interactions": "3.3.0",
     "express": "4.18.2",
-    "node-fetch": "3.3.1"
+    "node-fetch": "3.3.1",
+    "nconf": "0.12.0",
+    "redis": "4.5.0"
   },
   "devDependencies": {
-    "prisma": "4.11.0",
+    "@types/express": "4.17.14",
+    "@types/node": "18.7.17",
+    "@typescript-eslint/eslint-plugin": "5.16.0",
+    "@typescript-eslint/parser": "5.16.0",
     "dotenv": "16.0.3",
     "gray-matter": "4.0.3",
-    "prettier": "2.8.4"
-  }
+    "prettier": "2.8.4",
+    "eslint": "8.11.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "nodemon": "2.0.20",
+    "typescript": "4.6.2"
+  },
+  "keywords": [],
+  "author": "IThundxr <contact@ithundxr.dev>"
 }
