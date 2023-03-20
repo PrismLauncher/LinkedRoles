@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
     "target": "es2022",
     "module": "ES2022",
+    "rootDir": "src",
     "outDir": "build",
     "moduleResolution": "node",
     "sourceMap": true,
