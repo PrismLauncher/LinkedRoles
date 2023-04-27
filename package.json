@@ -31,7 +31,7 @@
     "@typescript-eslint/parser": "5.56.0",
     "dotenv": "16.0.3",
     "gray-matter": "4.0.3",
-    "prettier": "2.8.5",
+    "prettier": "2.8.8",
     "eslint": "8.36.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
