@@ -2,11 +2,8 @@
   "name": "prism-linked-roles",
   "version": "1.0.0",
   "license": "GPL-3.0",
+  "author": "IThundxr <contact@ithundxr.dev>",
   "main": "./build/src/server.js",
-  "engines": {
-    "node": ">=18"
-  },
-  "type": "module",
   "scripts": {
     "pretest": "npm run build",
     "fix": "eslint --fix '**/*.ts'",
@@ -18,26 +15,24 @@
   "dependencies": {
     "body-parser": "1.20.2",
     "cookie-parser": "1.4.6",
-    "discord-interactions": "3.3.0",
+    "discord-interactions": "3.4.0",
     "express": "4.18.2",
     "gaxios": "^5.1.0",
     "nconf": "0.12.0",
-    "redis": "4.6.5"
+    "redis": "4.6.6"
   },
   "devDependencies": {
     "@types/express": "4.17.17",
-    "@types/node": "18.16.1",
-    "@typescript-eslint/eslint-plugin": "5.59.1",
-    "@typescript-eslint/parser": "5.59.1",
+    "@types/node": "18.16.5",
+    "@typescript-eslint/eslint-plugin": "5.59.5",
+    "@typescript-eslint/parser": "5.59.5",
     "dotenv": "16.0.3",
-    "eslint": "8.39.0",
+    "eslint": "8.40.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
     "gray-matter": "4.0.3",
     "nodemon": "2.0.22",
     "prettier": "2.8.8",
     "typescript": "5.0.4"
-  },
-  "keywords": [],
-  "author": "IThundxr <contact@ithundxr.dev>"
+  }
 }
