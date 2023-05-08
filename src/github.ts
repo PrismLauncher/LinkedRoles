@@ -46,7 +46,6 @@ export function getOAuthUrl() {
   url.searchParams.set('client_id', process.env.GITHUB_CLIENT_ID);
   url.searchParams.set('redirect_uri', process.env.GITHUB_REDIRECT_URI);
   url.searchParams.set('state', state);
-  url.searchParams.set('response_type', 'code');
   url.searchParams.set(
     'scope',
     'read:user'
@@ -75,6 +74,11 @@ export async function getOAuthTokens(code: string) {
   });
   return r.data;
 }
+
+// ################################################################
+// CODE BELOW THIS POINT NEEDS TO BE CHANGED TO WORK WITH GITHUB
+// ################################################################
+
 
 /**
  * The initial token request comes with both an access token and a refresh
