@@ -1,10 +1,10 @@
-FROM node:20 AS builder
+FROM node:19 AS builder
 WORKDIR /app
 COPY package*.json ./
 COPY . .
 RUN yarn run build
 
-FROM node:20
+FROM node:19
 WORKDIR /app
 COPY package* ./
 COPY --from=builder ./app/build/src ./build/src
