@@ -32,7 +32,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "gray-matter": "4.0.3",
     "nodemon": "2.0.22",
-    "prettier": "2.8.8",
+    "prettier": "3.0.0",
     "typescript": "5.0.4"
   }
 }
